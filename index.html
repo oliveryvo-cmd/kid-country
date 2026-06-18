@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>KidCountry — The Country Run By Kids</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--red:#ff4444;--blue:#4488ff;--green:#44ff88;--gold:#ffcc00;--purple:#cc44ff;}
+body{background:#050510;color:#fff;font-family:'Courier New',monospace;overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:rgba(5,5,16,0.95);border-bottom:1px solid #ffffff11;backdrop-filter:blur(10px);}
+.nav-logo{font-size:1rem;font-weight:900;letter-spacing:4px;background:linear-gradient(90deg,var(--gold),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-links{display:flex;gap:10px;}
+.nav-btn{padding:8px 18px;border:none;border-radius:50px;font-size:0.55rem;font-weight:900;letter-spacing:3px;cursor:pointer;font-family:'Courier New',monospace;transition:all 0.2s;}
+.nav-btn.outline{background:transparent;border:1px solid rgba(255,255,255,0.15);color:#fff;}
+.nav-btn.outline:hover{border-color:var(--gold);color:var(--gold);}
+.nav-btn.fill{background:linear-gradient(135deg,var(--gold),var(--red));color:#000;}
+.nav-btn.fill:hover{transform:scale(1.05);}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,#1a0820 0%,#050510 70%);z-index:0;}
+.flag{font-size:5rem;margin-bottom:16px;animation:wave 3s ease-in-out infinite;}
+@keyframes wave{0%,100%{transform:rotate(-5deg);}50%{transform:rotate(5deg);}}
+.hero-content{position:relative;z-index:1;}
+.hero-tag{display:inline-block;font-size:0.55rem;letter-spacing:5px;color:var(--gold);border:1px solid rgba(255,204,0,0.3);padding:6px 18px;border-radius:50px;margin-bottom:20px;}
+.hero-title{font-size:clamp(3rem,14vw,9rem);font-weight:900;letter-spacing:8px;line-height:0.9;margin-bottom:20px;}
+.hero-title .k{background:linear-gradient(135deg,var(--gold),#ffaa00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;}
+.hero-title .c{background:linear-gradient(135deg,var(--red),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;}
+.hero-sub{font-size:clamp(0.65rem,2.5vw,1rem);letter-spacing:4px;color:#aaaacc;margin-bottom:12px;max-width:550px;}
+.hero-const{font-size:clamp(0.55rem,1.5vw,0.75rem);letter-spacing:3px;color:var(--gold);padding:10px 24px;border:1px solid rgba(255,204,0,0.2);border-radius:50px;display:inline-block;margin-bottom:40px;}
+.join-big{padding:18px 60px;background:linear-gradient(135deg,var(--gold),var(--red));border:none;color:#000;font-size:1rem;font-weight:900;letter-spacing:6px;cursor:pointer;border-radius:50px;box-shadow:0 0 40px #ffcc0044;transition:all 0.2s;font-family:'Courier New',monospace;}
+.join-big:hover{transform:scale(1.07);box-shadow:0 0 60px #ffcc0088;}
+
+/* CITIZEN COUNT */
+#citizens-bar{padding:50px 20px;text-align:center;}
+.cit-box{display:inline-flex;gap:40px;background:rgba(255,204,0,0.04);border:1px solid rgba(255,204,0,0.15);border-radius:20px;padding:28px 48px;flex-wrap:wrap;justify-content:center;}
+.cit-stat{text-align:center;}
+.cit-num{font-size:2.5rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.cit-label{font-size:0.5rem;letter-spacing:4px;color:#555544;margin-top:4px;}
+
+/* CONSTITUTION */
+#constitution{padding:80px 20px;text-align:center;}
+.const-box{max-width:640px;margin:0 auto;background:rgba(255,204,0,0.03);border:2px solid rgba(255,204,0,0.15);border-radius:24px;padding:48px 32px;}
+.const-title{font-size:clamp(1rem,4vw,1.6rem);font-weight:900;letter-spacing:6px;color:var(--gold);margin-bottom:8px;}
+.const-sub{font-size:0.55rem;letter-spacing:3px;color:#555544;margin-bottom:32px;}
+.law{display:flex;align-items:flex-start;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.04);text-align:left;}
+.law:last-child{border-bottom:none;}
+.law-num{font-size:1.5rem;font-weight:900;color:var(--gold);min-width:36px;}
+.law-text h3{font-size:0.7rem;letter-spacing:4px;color:#fff;margin-bottom:4px;}
+.law-text p{font-size:0.55rem;letter-spacing:2px;color:#888877;line-height:2;}
+
+/* IDEAS BOARD */
+#ideas{padding:80px 20px;border-top:1px solid #ffffff06;}
+.section-title{text-align:center;font-size:clamp(1rem,4vw,1.8rem);font-weight:900;letter-spacing:6px;margin-bottom:8px;}
+.section-sub{text-align:center;font-size:0.55rem;letter-spacing:4px;color:#444466;margin-bottom:40px;}
+.ideas-header{display:flex;justify-content:space-between;align-items:center;max-width:800px;margin:0 auto 20px;flex-wrap:wrap;gap:12px;}
+.post-idea-btn{padding:10px 28px;background:linear-gradient(135deg,var(--blue),var(--purple));border:none;color:#fff;font-size:0.6rem;font-weight:900;letter-spacing:3px;cursor:pointer;border-radius:50px;font-family:'Courier New',monospace;transition:all 0.2s;}
+.post-idea-btn:hover{transform:scale(1.05);}
+.ideas-grid{display:flex;flex-direction:column;gap:12px;max-width:800px;margin:0 auto;}
+.idea-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:20px 24px;display:flex;align-items:center;gap:16px;transition:all 0.2s;}
+.idea-card:hover{border-color:var(--gold);background:rgba(255,204,0,0.04);}
+.idea-vote{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:48px;}
+.vote-btn{background:none;border:1px solid rgba(255,255,255,0.1);border-radius:50%;width:32px;height:32px;color:#888;font-size:0.8rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
+.vote-btn:hover,.vote-btn.voted{border-color:var(--gold);color:var(--gold);background:rgba(255,204,0,0.1);}
+.vote-count{font-size:0.8rem;font-weight:900;color:#fff;}
+.idea-content{flex:1;}
+.idea-title{font-size:0.75rem;font-weight:900;letter-spacing:3px;color:#fff;margin-bottom:4px;}
+.idea-desc{font-size:0.55rem;letter-spacing:1px;color:#777788;line-height:1.8;}
+.idea-author{font-size:0.45rem;letter-spacing:3px;color:#444455;margin-top:6px;}
+.idea-badge{font-size:0.45rem;letter-spacing:3px;padding:3px 10px;border-radius:50px;font-weight:900;}
+.badge-top{background:var(--gold);color:#000;}
+.badge-new{background:var(--green);color:#000;}
+
+/* POST IDEA MODAL */
+#idea-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.92);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;}
+#idea-modal.open{display:flex;}
+.idea-box{background:#080512;border:1px solid rgba(255,204,0,0.2);border-radius:24px;max-width:500px;width:100%;padding:40px;position:relative;}
+.idea-box-title{font-size:1.1rem;font-weight:900;letter-spacing:5px;color:var(--gold);margin-bottom:6px;}
+.idea-box-sub{font-size:0.55rem;letter-spacing:3px;color:#555544;margin-bottom:28px;}
+.form-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 18px;color:#fff;font-size:0.75rem;letter-spacing:1px;font-family:'Courier New',monospace;outline:none;margin-bottom:12px;transition:border 0.2s;}
+.form-input:focus{border-color:var(--gold);}
+.submit-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--red));border:none;color:#000;font-size:0.75rem;font-weight:900;letter-spacing:5px;cursor:pointer;border-radius:50px;font-family:'Courier New',monospace;transition:all 0.2s;margin-top:4px;}
+.submit-btn:hover{transform:scale(1.02);}
+.modal-close{position:absolute;top:16px;right:20px;background:none;border:none;color:#888;font-size:1.2rem;cursor:pointer;}
+
+/* LEADERBOARD */
+#leaders{padding:80px 20px;border-top:1px solid #ffffff06;text-align:center;}
+.leader-list{max-width:600px;margin:0 auto;}
+.leader-item{display:flex;align-items:center;gap:16px;padding:16px 20px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;margin-bottom:10px;transition:all 0.2s;}
+.leader-item:hover{border-color:var(--gold);}
+.leader-rank{font-size:1.4rem;min-width:36px;text-align:center;}
+.leader-info{flex:1;text-align:left;}
+.leader-name{font-size:0.75rem;font-weight:900;letter-spacing:4px;color:#fff;}
+.leader-country{font-size:0.5rem;letter-spacing:3px;color:#444455;}
+.leader-votes{font-size:0.9rem;font-weight:900;color:var(--gold);}
+
+/* JOIN */
+#join{padding:80px 20px;text-align:center;border-top:1px solid #ffffff06;}
+.join-box{max-width:520px;margin:0 auto;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:24px;padding:48px 32px;}
+.join-title{font-size:clamp(1.2rem,5vw,2rem);font-weight:900;letter-spacing:6px;margin-bottom:8px;background:linear-gradient(135deg,var(--gold),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.join-sub{font-size:0.55rem;letter-spacing:3px;color:#555544;margin-bottom:32px;line-height:2;}
+.join-confirm{display:none;margin-top:20px;padding:20px;background:rgba(255,204,0,0.06);border:1px solid rgba(255,204,0,0.2);border-radius:12px;}
+.join-confirm-emoji{font-size:3rem;margin-bottom:8px;}
+.join-confirm-text{font-size:0.65rem;letter-spacing:3px;color:var(--gold);line-height:2;}
+
+/* FOOTER */
+footer{padding:32px 20px;text-align:center;border-top:1px solid #ffffff06;}
+footer p{font-size:0.5rem;letter-spacing:3px;color:#333344;}
+
+/* STAR PARTICLES */
+.star-p{position:fixed;pointer-events:none;animation:starFloat linear infinite;opacity:0;}
+@keyframes starFloat{0%{transform:translateY(100vh);opacity:0;}10%{opacity:0.8;}90%{opacity:0.6;}100%{transform:translateY(-40px);opacity:0;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">🏴 KID COUNTRY</div>
+  <div class="nav-links">
+    <button class="nav-btn outline" onclick="document.getElementById('ideas').scrollIntoView({behavior:'smooth'})">💡 IDEAS</button>
+    <button class="nav-btn outline" onclick="document.getElementById('leaders').scrollIntoView({behavior:'smooth'})">🏆 LEADERS</button>
+    <button class="nav-btn fill" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">JOIN NOW</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="flag">🏴</div>
+    <div class="hero-tag">🌍 THE COUNTRY RUN BY KIDS</div>
+    <h1 class="hero-title">
+      <span class="k">KID</span>
+      <span class="c">COUNTRY</span>
+    </h1>
+    <p class="hero-sub">NO ADULTS IN CHARGE. KIDS MAKE THE RULES. KIDS CHANGE THE WORLD.</p>
+    <div class="hero-const">ARTICLE 1: EVERY KID HAS A VOICE THAT MATTERS</div>
+    <button class="join-big" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">🏴 BECOME A CITIZEN</button>
+  </div>
+</section>
+
+<!-- CITIZEN COUNT -->
+<section id="citizens-bar">
+  <div class="cit-box">
+    <div class="cit-stat"><div class="cit-num" id="cit-count">1</div><div class="cit-label">CITIZENS</div></div>
+    <div class="cit-stat"><div class="cit-num" id="idea-count">3</div><div class="cit-label">IDEAS SUBMITTED</div></div>
+    <div class="cit-stat"><div class="cit-num">FREE</div><div class="cit-label">FOREVER</div></div>
+  </div>
+</section>
+
+<!-- CONSTITUTION -->
+<section id="constitution">
+  <div class="const-box">
+    <div class="const-title">📜 THE KID CONSTITUTION</div>
+    <div class="const-sub">WRITTEN BY KIDS · FOR KIDS · FOREVER</div>
+    <div class="law">
+      <div class="law-num">1</div>
+      <div class="law-text"><h3>EVERY KID HAS A VOICE</h3><p>No idea is too small. No kid is too young. Every citizen can speak and be heard.</p></div>
+    </div>
+    <div class="law">
+      <div class="law-num">2</div>
+      <div class="law-text"><h3>KIDS DECIDE TOGETHER</h3><p>We vote on ideas. The most votes wins. Democracy for kids, by kids.</p></div>
+    </div>
+    <div class="law">
+      <div class="law-num">3</div>
+      <div class="law-text"><h3>NO BULLYING — EVER</h3><p>KidCountry is a safe place. Anyone who is mean gets removed. Kindness is law.</p></div>
+    </div>
+    <div class="law">
+      <div class="law-num">4</div>
+      <div class="law-text"><h3>DISABLED KIDS ARE EQUAL</h3><p>Every kid — disabled or not — has the same rights and the same voice in KidCountry.</p></div>
+    </div>
+    <div class="law">
+      <div class="law-num">5</div>
+      <div class="law-text"><h3>KIDS CAN CHANGE THE WORLD</h3><p>We are not too young. We are not too small. KidCountry proves kids can do anything.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- IDEAS BOARD -->
+<section id="ideas">
+  <div class="section-title">💡 IDEAS BOARD</div>
+  <div class="section-sub">POST YOUR IDEA · THE WORLD VOTES · THE BEST IDEAS WIN</div>
+  <div class="ideas-header" style="max-width:800px;margin:0 auto 20px;display:flex;justify-content:flex-end;">
+    <button class="post-idea-btn" onclick="openIdeaModal()">+ POST YOUR IDEA</button>
+  </div>
+  <div class="ideas-grid" id="ideas-grid"></div>
+</section>
+
+<!-- LEADERS -->
+<section id="leaders">
+  <div class="section-title">🏆 TOP CITIZENS</div>
+  <div class="section-sub">KIDS WITH THE MOST VOTES ON THEIR IDEAS</div>
+  <div class="leader-list" id="leader-list"></div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="join-box">
+    <div class="join-title">BECOME A CITIZEN</div>
+    <div class="join-sub">Join KidCountry. Post ideas. Vote. Change the world.<br>No adults required.</div>
+    <input class="form-input" id="j-name" type="text" placeholder="Your first name">
+    <input class="form-input" id="j-age" type="number" placeholder="Your age" min="5" max="17">
+    <input class="form-input" id="j-country" type="text" placeholder="Your country">
+    <button class="submit-btn" onclick="joinCountry()">🏴 BECOME A CITIZEN</button>
+    <div class="join-confirm" id="join-confirm">
+      <div class="join-confirm-emoji">🏴</div>
+      <div class="join-confirm-text" id="join-confirm-text">WELCOME TO KID COUNTRY!<br>YOU ARE CITIZEN #1</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>KID COUNTRY · FOUNDED BY OLIVER VO · AGE 10 · NO ADULTS IN CHARGE · FREE FOREVER</p>
+</footer>
+
+<!-- IDEA MODAL -->
+<div id="idea-modal">
+  <div class="idea-box">
+    <button class="modal-close" onclick="closeIdeaModal()">✕</button>
+    <div class="idea-box-title">💡 POST YOUR IDEA</div>
+    <div class="idea-box-sub">WHAT WOULD YOU CHANGE ABOUT THE WORLD?</div>
+    <input class="form-input" id="i-title" type="text" placeholder="Your idea in one sentence">
+    <textarea class="form-input" id="i-desc" rows="3" placeholder="Tell us more about your idea..." style="resize:none;"></textarea>
+    <input class="form-input" id="i-name" type="text" placeholder="Your name">
+    <input class="form-input" id="i-country" type="text" placeholder="Your country">
+    <button class="submit-btn" onclick="postIdea()">🚀 SUBMIT IDEA</button>
+  </div>
+</div>
+
+<script>
+// DEFAULT IDEAS
+const DEFAULT_IDEAS = [
+  {id:1,title:'FREE SCHOOL LUNCHES FOR EVERY KID',desc:'No kid should go hungry at school. Every country should give free lunch to every student.',author:'Oliver',country:'USA',votes:24,voted:false},
+  {id:2,title:'NO HOMEWORK ON WEEKENDS',desc:'Kids need time to be kids. Weekends should be free for play, family, and rest.',author:'Sofia',country:'Brazil',votes:18,voted:false},
+  {id:3,title:'EVERY SCHOOL NEEDS A GAME ROOM',desc:'Kids learn better when they can play. Every school should have a room with games and fun activities.',author:'Kai',country:'Japan',votes:15,voted:false},
+];
+
+let ideas = [...DEFAULT_IDEAS, ...JSON.parse(localStorage.getItem('kc_ideas')||'[]')];
+let citizens = JSON.parse(localStorage.getItem('kc_citizens')||'[]');
+let votedIds = JSON.parse(localStorage.getItem('kc_voted')||'[]');
+
+function saveIdeas(){
+  const userIdeas = ideas.filter(i=>i.id>100);
+  localStorage.setItem('kc_ideas',JSON.stringify(userIdeas));
+}
+
+function renderIdeas(){
+  const sorted = [...ideas].sort((a,b)=>b.votes-a.votes);
+  document.getElementById('ideas-grid').innerHTML = sorted.map((idea,i)=>`
+    <div class="idea-card">
+      <div class="idea-vote">
+        <button class="vote-btn ${votedIds.includes(idea.id)?'voted':''}" onclick="vote(${idea.id})">▲</button>
+        <div class="vote-count">${idea.votes}</div>
+      </div>
+      <div class="idea-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          ${i===0?'<span class="idea-badge badge-top">🏆 TOP IDEA</span>':''}
+          ${idea.id>100?'<span class="idea-badge badge-new">✨ NEW</span>':''}
+        </div>
+        <div class="idea-title">${idea.title}</div>
+        <div class="idea-desc">${idea.desc}</div>
+        <div class="idea-author">BY ${idea.author.toUpperCase()} · ${idea.country.toUpperCase()}</div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('idea-count').textContent = ideas.length;
+}
+
+function vote(id){
+  if(votedIds.includes(id)){
+    // unvote
+    votedIds = votedIds.filter(v=>v!==id);
+    ideas.find(i=>i.id===id).votes--;
+  } else {
+    votedIds.push(id);
+    ideas.find(i=>i.id===id).votes++;
+  }
+  localStorage.setItem('kc_voted',JSON.stringify(votedIds));
+  saveIdeas();
+  renderIdeas();
+  renderLeaders();
+}
+
+function openIdeaModal(){document.getElementById('idea-modal').classList.add('open');}
+function closeIdeaModal(){document.getElementById('idea-modal').classList.remove('open');}
+document.getElementById('idea-modal').addEventListener('click',e=>{if(e.target===document.getElementById('idea-modal'))closeIdeaModal();});
+
+function postIdea(){
+  const title=document.getElementById('i-title').value.trim();
+  const desc=document.getElementById('i-desc').value.trim();
+  const name=document.getElementById('i-name').value.trim();
+  const country=document.getElementById('i-country').value.trim();
+  if(!title||!name||!country){alert('Please fill in your idea, name, and country!');return;}
+  const newIdea={id:Date.now(),title,desc:desc||'A great idea from a KidCountry citizen.',author:name,country,votes:1,voted:false};
+  ideas.unshift(newIdea);
+  votedIds.push(newIdea.id);
+  localStorage.setItem('kc_voted',JSON.stringify(votedIds));
+  saveIdeas();
+  renderIdeas();
+  renderLeaders();
+  closeIdeaModal();
+  document.getElementById('i-title').value='';
+  document.getElementById('i-desc').value='';
+  document.getElementById('i-name').value='';
+  document.getElementById('i-country').value='';
+  document.getElementById('ideas').scrollIntoView({behavior:'smooth'});
+}
+
+function renderLeaders(){
+  const authorVotes={};
+  ideas.forEach(i=>{
+    if(!authorVotes[i.author]) authorVotes[i.author]={name:i.author,country:i.country,votes:0};
+    authorVotes[i.author].votes+=i.votes;
+  });
+  const sorted=Object.values(authorVotes).sort((a,b)=>b.votes-a.votes).slice(0,5);
+  const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
+  document.getElementById('leader-list').innerHTML=sorted.map((l,i)=>`
+    <div class="leader-item">
+      <div class="leader-rank">${medals[i]}</div>
+      <div class="leader-info">
+        <div class="leader-name">${l.name.toUpperCase()}</div>
+        <div class="leader-country">${l.country.toUpperCase()}</div>
+      </div>
+      <div class="leader-votes">${l.votes} VOTES</div>
+    </div>
+  `).join('');
+}
+
+function joinCountry(){
+  const name=document.getElementById('j-name').value.trim();
+  const age=document.getElementById('j-age').value.trim();
+  const country=document.getElementById('j-country').value.trim();
+  if(!name||!age||!country){alert('Please fill in your name, age, and country!');return;}
+  citizens.push({name,age,country});
+  localStorage.setItem('kc_citizens',JSON.stringify(citizens));
+  document.getElementById('cit-count').textContent=citizens.length+1;
+  document.getElementById('join-confirm-text').textContent=`WELCOME TO KID COUNTRY, ${name.toUpperCase()}!\nYOU ARE CITIZEN #${citizens.length+1}`;
+  document.getElementById('join-confirm').style.display='block';
+  document.getElementById('j-name').value='';
+  document.getElementById('j-age').value='';
+  document.getElementById('j-country').value='';
+  document.getElementById('join-confirm').scrollIntoView({behavior:'smooth'});
+  for(let i=0;i<8;i++) spawnStar();
+}
+
+// STAR PARTICLES
+function spawnStar(){
+  const s=document.createElement('div');
+  s.className='star-p';
+  s.textContent=['⭐','🌟','✨','🏴'][Math.floor(Math.random()*4)];
+  s.style.cssText=`left:${Math.random()*100}vw;bottom:0;font-size:${Math.random()*1.2+0.8}rem;animation-duration:${Math.random()*4+4}s;`;
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),(Math.random()*4+4)*1000);
+}
+setInterval(spawnStar,1500);
+
+document.getElementById('cit-count').textContent=citizens.length+1;
+renderIdeas();
+renderLeaders();
+</script>
+</body>
+</html>
