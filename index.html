@@ -232,11 +232,7 @@ footer p{font-size:0.5rem;letter-spacing:3px;color:#333344;}
 
 <script>
 // DEFAULT IDEAS
-const DEFAULT_IDEAS = [
-  {id:1,title:'FREE SCHOOL LUNCHES FOR EVERY KID',desc:'No kid should go hungry at school. Every country should give free lunch to every student.',author:'Oliver',country:'USA',votes:24,voted:false},
-  {id:2,title:'NO HOMEWORK ON WEEKENDS',desc:'Kids need time to be kids. Weekends should be free for play, family, and rest.',author:'Anonymous',country:'USA',votes:18,voted:false},
-  {id:3,title:'EVERY SCHOOL NEEDS A GAME ROOM',desc:'Kids learn better when they can play. Every school should have a room with games and fun activities.',author:'Anonymous',country:'USA',votes:15,voted:false},
-];
+const DEFAULT_IDEAS = [];
 
 let ideas = [...DEFAULT_IDEAS, ...JSON.parse(localStorage.getItem('kc_ideas')||'[]')];
 let citizens = JSON.parse(localStorage.getItem('kc_citizens')||'[]');
@@ -294,7 +290,6 @@ function postIdea(){
   const name=document.getElementById('i-name').value.trim();
   const country=document.getElementById('i-country').value.trim();
   if(!title||!name||!country){alert('Please fill in your idea, username, and country!');return;}
-  if(!citizens.some(c=>c.name.toLowerCase()===name.toLowerCase())&&name!=='Oliver'){alert('Username not found! Please become a citizen first before posting an idea.');return;}
   const newIdea={id:Date.now(),title,desc:desc||'A great idea from a KidCountry citizen.',author:name,country,votes:1,voted:false};
   ideas.unshift(newIdea);
   votedIds.push(newIdea.id);
