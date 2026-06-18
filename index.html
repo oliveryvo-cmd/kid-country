@@ -165,6 +165,7 @@ footer p{font-size:0.5rem;letter-spacing:3px;color:#333344;}
     <button class="nav-btn outline" onclick="document.getElementById('ideas').scrollIntoView({behavior:'smooth'})">💡 IDEAS</button>
     <button class="nav-btn outline" onclick="document.getElementById('leaders').scrollIntoView({behavior:'smooth'})">🏆 LEADERS</button>
     <button class="nav-btn fill" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">JOIN NOW</button>
+    <button class="nav-btn outline" onclick="openAdmin()" style="border-color:rgba(255,50,50,0.4);color:#ff4444;">👑 ADMIN</button>
   </div>
 </nav>
 
@@ -281,6 +282,22 @@ footer p{font-size:0.5rem;letter-spacing:3px;color:#333344;}
       <div class="join-confirm-emoji">🏴</div>
       <div class="join-confirm-text" id="join-confirm-text">WELCOME TO ALLONEKIDS!<br>YOU ARE CITIZEN #1</div>
     </div>
+  </div>
+</section>
+
+<!-- ADMIN PANEL -->
+<section id="admin-panel" style="display:none;padding:80px 20px;border-top:2px solid rgba(255,50,50,0.3);">
+  <div style="max-width:700px;margin:0 auto;background:rgba(255,50,50,0.04);border:1px solid rgba(255,50,50,0.2);border-radius:24px;padding:40px;">
+    <div style="font-size:1.2rem;font-weight:900;letter-spacing:6px;color:#ff4444;margin-bottom:24px;">👑 ADMIN PANEL</div>
+    <div style="font-size:0.6rem;letter-spacing:4px;color:#ff4444;margin-bottom:12px;">📢 ANNOUNCEMENT</div>
+    <div style="display:flex;gap:8px;margin-bottom:32px;">
+      <input id="admin-announce-input" class="form-input" type="text" placeholder="Send announcement to all citizens..." style="margin-bottom:0;">
+      <button onclick="adminAnnounce()" style="padding:10px 20px;background:#ff4444;border:none;color:#fff;font-size:0.55rem;letter-spacing:3px;font-weight:900;cursor:pointer;border-radius:50px;font-family:'Courier New',monospace;white-space:nowrap;">SEND</button>
+    </div>
+    <div style="font-size:0.6rem;letter-spacing:4px;color:#ff4444;margin-bottom:12px;">👥 MEMBERS (<span id="admin-member-count"></span>)</div>
+    <div id="admin-members" style="margin-bottom:32px;max-height:200px;overflow-y:auto;"></div>
+    <div style="font-size:0.6rem;letter-spacing:4px;color:#ff4444;margin-bottom:12px;">💡 IDEAS</div>
+    <div id="admin-ideas" style="max-height:200px;overflow-y:auto;"></div>
   </div>
 </section>
 
@@ -552,8 +569,72 @@ function postNews(){
   checkBadges();
 }
 
-// Also update joinCountry and postIdea and vote to checkBadges
-const _origJoin=joinCountry;
+// ADMIN
+const ADMIN_PASS = '67rtuy';
+let isAdmin = false;
+
+function openAdmin(){
+  const pass = prompt('Enter admin password:');
+  if(pass === ADMIN_PASS){
+    isAdmin = true;
+    renderAdminPanel();
+    document.getElementById('admin-panel').style.display='block';
+    document.getElementById('admin-panel').scrollIntoView({behavior:'smooth'});
+  } else {
+    alert('Wrong password!');
+  }
+}
+
+function renderAdminPanel(){
+  document.getElementById('admin-members').innerHTML = citizens.length
+    ? citizens.map((c,i)=>`<div style="padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:0.6rem;letter-spacing:2px;">#${i+1} ${c.name.toUpperCase()} · ${c.age} · ${c.country}</span>
+        <button onclick="adminRemoveMember('${c.name}')" style="background:rgba(255,50,50,0.2);border:1px solid #ff4444;color:#ff4444;font-size:0.45rem;letter-spacing:2px;padding:4px 10px;border-radius:20px;cursor:pointer;">REMOVE</button>
+      </div>`).join('')
+    : '<div style="font-size:0.55rem;color:#444;letter-spacing:3px;">NO MEMBERS YET</div>';
+
+  document.getElementById('admin-ideas').innerHTML = ideas.map(idea=>`
+    <div style="padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <span style="font-size:0.6rem;letter-spacing:1px;flex:1;">${idea.title} <span style="color:#555577;">· ${idea.votes} votes</span></span>
+      <button onclick="adminPinIdea(${idea.id})" style="background:rgba(255,204,0,0.2);border:1px solid var(--gold);color:var(--gold);font-size:0.45rem;letter-spacing:2px;padding:4px 10px;border-radius:20px;cursor:pointer;">📌 PIN</button>
+      <button onclick="adminDeleteIdea(${idea.id})" style="background:rgba(255,50,50,0.2);border:1px solid #ff4444;color:#ff4444;font-size:0.45rem;letter-spacing:2px;padding:4px 10px;border-radius:20px;cursor:pointer;">DELETE</button>
+    </div>`).join('');
+}
+
+function adminRemoveMember(name){
+  if(!confirm('Remove '+name+'?')) return;
+  citizens = citizens.filter(c=>c.name!==name);
+  localStorage.setItem('kc_citizens',JSON.stringify(citizens));
+  document.getElementById('cit-count').textContent=citizens.length;
+  renderAdminPanel();
+}
+function adminDeleteIdea(id){
+  if(!confirm('Delete this idea?')) return;
+  ideas = ideas.filter(i=>i.id!==id);
+  localStorage.setItem('kc_ideas',JSON.stringify(ideas.filter(i=>i.id>100)));
+  renderIdeas();
+  renderLeaders();
+  renderAdminPanel();
+}
+function adminPinIdea(id){
+  const idea = ideas.find(i=>i.id===id);
+  if(idea){ idea.votes+=100; }
+  localStorage.setItem('kc_ideas',JSON.stringify(ideas.filter(i=>i.id>100)));
+  renderIdeas();
+  renderLeaders();
+  renderAdminPanel();
+  alert('Idea pinned to top!');
+}
+function adminAnnounce(){
+  const msg = document.getElementById('admin-announce-input').value.trim();
+  if(!msg) return;
+  chatMsgs.unshift({author:'👑 ADMIN',text:msg,time:'just now'});
+  localStorage.setItem('kc_chats',JSON.stringify(chatMsgs));
+  renderChat();
+  document.getElementById('admin-announce-input').value='';
+  alert('Announcement sent!');
+}
+
 renderBadges();
 renderChat();
 renderNews();
