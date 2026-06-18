@@ -338,8 +338,8 @@ function joinCountry(){
   if(citizens.some(c=>c.name.toLowerCase()===name.toLowerCase())){alert('That username is already taken! Pick a different one.');return;}
   citizens.push({name,age,country});
   localStorage.setItem('kc_citizens',JSON.stringify(citizens));
-  document.getElementById('cit-count').textContent=citizens.length+1;
-  document.getElementById('join-confirm-text').textContent=`WELCOME TO KID COUNTRY, ${name.toUpperCase()}!\nYOU ARE CITIZEN #${citizens.length+1}`;
+  document.getElementById('cit-count').textContent=citizens.length;
+  document.getElementById('join-confirm-text').textContent=`WELCOME TO KID COUNTRY, ${name.toUpperCase()}!\nYOU ARE CITIZEN #${citizens.length}`;
   document.getElementById('join-confirm').style.display='block';
   document.getElementById('j-name').value='';
   document.getElementById('j-age').value='';
@@ -359,7 +359,7 @@ function spawnStar(){
 }
 setInterval(spawnStar,1500);
 
-document.getElementById('cit-count').textContent=citizens.length+1;
+document.getElementById('cit-count').textContent=citizens.length;
 renderIdeas();
 renderLeaders();
 </script>
