@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>KidCountry — The Country Run By Kids</title>
+<title>AllOneKids — The Country Run By Kids</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{--red:#ff4444;--blue:#4488ff;--green:#44ff88;--gold:#ffcc00;--purple:#cc44ff;}
@@ -118,7 +118,7 @@ footer p{font-size:0.5rem;letter-spacing:3px;color:#333344;}
 <body>
 
 <nav>
-  <div class="nav-logo">🏴 KID COUNTRY</div>
+  <div class="nav-logo">🏴 ALLONEKIDS</div>
   <div class="nav-links">
     <button class="nav-btn outline" onclick="document.getElementById('ideas').scrollIntoView({behavior:'smooth'})">💡 IDEAS</button>
     <button class="nav-btn outline" onclick="document.getElementById('leaders').scrollIntoView({behavior:'smooth'})">🏆 LEADERS</button>
@@ -166,15 +166,15 @@ footer p{font-size:0.5rem;letter-spacing:3px;color:#333344;}
     </div>
     <div class="law">
       <div class="law-num">3</div>
-      <div class="law-text"><h3>NO BULLYING — EVER</h3><p>KidCountry is a safe place. Anyone who is mean gets removed. Kindness is law.</p></div>
+      <div class="law-text"><h3>NO BULLYING — EVER</h3><p>AllOneKids is a safe place. Anyone who is mean gets removed. Kindness is law.</p></div>
     </div>
     <div class="law">
       <div class="law-num">4</div>
-      <div class="law-text"><h3>DISABLED KIDS ARE EQUAL</h3><p>Every kid — disabled or not — has the same rights and the same voice in KidCountry.</p></div>
+      <div class="law-text"><h3>DISABLED KIDS ARE EQUAL</h3><p>Every kid — disabled or not — has the same rights and the same voice in AllOneKids.</p></div>
     </div>
     <div class="law">
       <div class="law-num">5</div>
-      <div class="law-text"><h3>KIDS CAN CHANGE THE WORLD</h3><p>We are not too young. We are not too small. KidCountry proves kids can do anything.</p></div>
+      <div class="law-text"><h3>KIDS CAN CHANGE THE WORLD</h3><p>We are not too young. We are not too small. AllOneKids proves kids can do anything.</p></div>
     </div>
   </div>
 </section>
@@ -200,20 +200,20 @@ footer p{font-size:0.5rem;letter-spacing:3px;color:#333344;}
 <section id="join">
   <div class="join-box">
     <div class="join-title">BECOME A CITIZEN</div>
-    <div class="join-sub">Join KidCountry. Post ideas. Vote. Change the world.<br>No adults required.</div>
+    <div class="join-sub">Join AllOneKids. Post ideas. Vote. Change the world.<br>No adults required.</div>
     <input class="form-input" id="j-name" type="text" placeholder="Pick a username (e.g. OliverKRG)">
     <input class="form-input" id="j-age" type="number" placeholder="Your age" min="5" max="17">
     <input class="form-input" id="j-country" type="text" placeholder="Your country">
     <button class="submit-btn" onclick="joinCountry()">🏴 BECOME A CITIZEN</button>
     <div class="join-confirm" id="join-confirm">
       <div class="join-confirm-emoji">🏴</div>
-      <div class="join-confirm-text" id="join-confirm-text">WELCOME TO KID COUNTRY!<br>YOU ARE CITIZEN #1</div>
+      <div class="join-confirm-text" id="join-confirm-text">WELCOME TO ALLONEKIDS!<br>YOU ARE CITIZEN #1</div>
     </div>
   </div>
 </section>
 
 <footer>
-  <p>KID COUNTRY · FOUNDED BY OLIVER VO · AGE 10 · NO ADULTS IN CHARGE · FREE FOREVER</p>
+  <p>ALLONEKIDS · FOUNDED BY OLIVER VO · AGE 10 · NO ADULTS IN CHARGE · FREE FOREVER</p>
 </footer>
 
 <!-- IDEA MODAL -->
@@ -290,7 +290,7 @@ function postIdea(){
   const name=document.getElementById('i-name').value.trim();
   const country=document.getElementById('i-country').value.trim();
   if(!title||!name||!country){alert('Please fill in your idea, username, and country!');return;}
-  const newIdea={id:Date.now(),title,desc:desc||'A great idea from a KidCountry citizen.',author:name,country,votes:1,voted:false};
+  const newIdea={id:Date.now(),title,desc:desc||'A great idea from a AllOneKids citizen.',author:name,country,votes:1,voted:false};
   ideas.unshift(newIdea);
   votedIds.push(newIdea.id);
   localStorage.setItem('kc_voted',JSON.stringify(votedIds));
@@ -334,7 +334,7 @@ function joinCountry(){
   citizens.push({name,age,country});
   localStorage.setItem('kc_citizens',JSON.stringify(citizens));
   document.getElementById('cit-count').textContent=citizens.length;
-  document.getElementById('join-confirm-text').textContent=`WELCOME TO KID COUNTRY, ${name.toUpperCase()}!\nYOU ARE CITIZEN #${citizens.length}`;
+  document.getElementById('join-confirm-text').textContent=`WELCOME TO ALLONEKIDS, ${name.toUpperCase()}!\nYOU ARE CITIZEN #${citizens.length}`;
   document.getElementById('join-confirm').style.display='block';
   document.getElementById('j-name').value='';
   document.getElementById('j-age').value='';
