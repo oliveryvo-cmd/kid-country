@@ -201,7 +201,7 @@ footer p{font-size:0.5rem;letter-spacing:3px;color:#333344;}
   <div class="join-box">
     <div class="join-title">BECOME A CITIZEN</div>
     <div class="join-sub">Join KidCountry. Post ideas. Vote. Change the world.<br>No adults required.</div>
-    <input class="form-input" id="j-name" type="text" placeholder="Your first name">
+    <input class="form-input" id="j-name" type="text" placeholder="Pick a username (e.g. OliverKRG)">
     <input class="form-input" id="j-age" type="number" placeholder="Your age" min="5" max="17">
     <input class="form-input" id="j-country" type="text" placeholder="Your country">
     <button class="submit-btn" onclick="joinCountry()">🏴 BECOME A CITIZEN</button>
@@ -224,7 +224,7 @@ footer p{font-size:0.5rem;letter-spacing:3px;color:#333344;}
     <div class="idea-box-sub">WHAT WOULD YOU CHANGE ABOUT THE WORLD?</div>
     <input class="form-input" id="i-title" type="text" placeholder="Your idea in one sentence">
     <textarea class="form-input" id="i-desc" rows="3" placeholder="Tell us more about your idea..." style="resize:none;"></textarea>
-    <input class="form-input" id="i-name" type="text" placeholder="Your name">
+    <input class="form-input" id="i-name" type="text" placeholder="Your username (e.g. OliverKRG)">
     <input class="form-input" id="i-country" type="text" placeholder="Your country">
     <button class="submit-btn" onclick="postIdea()">🚀 SUBMIT IDEA</button>
   </div>
@@ -293,7 +293,8 @@ function postIdea(){
   const desc=document.getElementById('i-desc').value.trim();
   const name=document.getElementById('i-name').value.trim();
   const country=document.getElementById('i-country').value.trim();
-  if(!title||!name||!country){alert('Please fill in your idea, name, and country!');return;}
+  if(!title||!name||!country){alert('Please fill in your idea, username, and country!');return;}
+  if(!citizens.some(c=>c.name.toLowerCase()===name.toLowerCase())&&name!=='Oliver'){alert('Username not found! Please become a citizen first before posting an idea.');return;}
   const newIdea={id:Date.now(),title,desc:desc||'A great idea from a KidCountry citizen.',author:name,country,votes:1,voted:false};
   ideas.unshift(newIdea);
   votedIds.push(newIdea.id);
@@ -333,7 +334,8 @@ function joinCountry(){
   const name=document.getElementById('j-name').value.trim();
   const age=document.getElementById('j-age').value.trim();
   const country=document.getElementById('j-country').value.trim();
-  if(!name||!age||!country){alert('Please fill in your name, age, and country!');return;}
+  if(!name||!age||!country){alert('Please fill in your username, age, and country!');return;}
+  if(citizens.some(c=>c.name.toLowerCase()===name.toLowerCase())){alert('That username is already taken! Pick a different one.');return;}
   citizens.push({name,age,country});
   localStorage.setItem('kc_citizens',JSON.stringify(citizens));
   document.getElementById('cit-count').textContent=citizens.length+1;
