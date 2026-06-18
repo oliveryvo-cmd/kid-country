@@ -437,6 +437,7 @@ function joinCountry(){
   const age=document.getElementById('j-age').value.trim();
   const country=document.getElementById('j-country').value.trim();
   if(!name||!age||!country){alert('Please fill in your username, age, and country!');return;}
+  if(parseInt(age)<1||parseInt(age)>18){alert('AllOneKids is only for kids ages 1-18!');return;}
   if(citizens.some(c=>c.name.toLowerCase()===name.toLowerCase())){alert('That username is already taken! Pick a different one.');return;}
   citizens.push({name,age,country});
   localStorage.setItem('kc_citizens',JSON.stringify(citizens));
